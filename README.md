@@ -1,24 +1,9 @@
-# README
+# rails / React Todo アプリケーション
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Todo アプリケーションのバックエンド WebAPI
 
-Things you may want to cover:
+## 各種バージョン
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- ruby: 2.6.X
+- rails: 6.1.X
+- RSpec: 3.10

@@ -8,12 +8,12 @@ RSpec.describe "Users", type: :request do
     end
 
     it "リクエストが成功すること" do
-      get "/users"
+      get "/api/v1/users"
       expect(response.status).to eq 200
     end
 
     it "ユーザー一覧が取得できること" do
-      get "/users"
+      get "/api/v1/users"
 
       expect(json.length).to eq(10)
     end

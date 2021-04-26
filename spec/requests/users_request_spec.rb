@@ -6,7 +6,8 @@ RSpec.describe "Users", type: :request do
   
   describe "GET /api/v1/users" do
     before do
-      create_list(:user, 10)
+      # create_list(:user, 10)
+      create_list(:user, 10 - 3) # spec/factories/tasks.rbで作成したインスタンスが消えない
     end
 
     it "リクエストが成功すること" do

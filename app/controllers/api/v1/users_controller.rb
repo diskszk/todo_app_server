@@ -32,10 +32,11 @@ module Api
           render json: @user.errors
         end
       end
+
       # DELETE /api/v1/users/:id
       def destroy
-        # @post.destroy
-        # render json: @post
+        @user.destroy
+        render json: @user
       end
       
       private

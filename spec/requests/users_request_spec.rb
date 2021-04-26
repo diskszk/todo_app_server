@@ -103,13 +103,17 @@ RSpec.describe "Users", type: :request do
     end
 
     it "存在しないIDが渡された場合404を返すこと" do
+
+      user_id = @user.id
+      
       # 一旦削除する
-      delete "#{uri}/#{@user.id}"
+      delete "#{uri}/#{user_id}"
       expect(response.status).to eq(200)
 
       # 再度削除する
-      delete "#{uri}/#{@user.id}"
-      expect(response.status).to eq(404)
+      delete "#{uri}/#{user_id}"
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(404)
     end
   end
 end

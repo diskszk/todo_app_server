@@ -25,6 +25,13 @@ module Api
       end
     
       # PUT /api/v1/users/:id
+      def update
+        if @user.update(user_params)
+          render json: @user
+        else
+          render json: @user.errors
+        end
+      end
       # DELETE /api/v1/users/:id
       
       private

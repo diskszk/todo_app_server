@@ -75,14 +75,18 @@ RSpec.describe "Users", type: :request do
     it "データが変更されていること" do
       put "#{uri}/#{@user.id}", params: @valid_params
       json = JSON.parse(response.body)
-      expect(json["name"]).to eq(@valid_params.name)
+      expect(json['name']).to eq("user_name")
     end
 
     it "nullでは書き換えられないこと" do
       user_name = @user.name
-      put "#{url}/#{@user.id}", params: {name: nil}
+      put "#{uri}/#{@user.id}", params: {name: nil}
       json = JSON.parse(response.body)
-      expect(json["name"]).to eq(user_name)
+      expect(json['name']).to_not eq(nil)
     end
   end
 end
+
+
+# json = JSON.parse(response.body)
+# expect(json['name']).to eq(@user.name)

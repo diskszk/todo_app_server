@@ -1,6 +1,47 @@
 module Api
   module V1  
     class TasksController < ApplicationController
+      before_action :set_task, only: [:show]
+
+      # GET /api/v1/users/:user_id/tasks
+      def index
+        tasks = Task.find(params[:user_id])
+        render json: tasks
+      end
+
+      # GET /api/v1/users/:user_id/tasks/:task_id
+      def show
+        render json: @task
+      end
+
+      # POST /api/v1/users/:user_id/tasks
+      def create
+        @task = Task.new(task_params)
+
+        if @task.save
+          render json: @task
+        else
+          render json: @task.errors
+        end
+      end
+
+      # PUT /api/v1/users/:user_id/tasks/:task_id
+
+      # DELETE /api/v1/users/:user_id/tasks/:task_id
+
+      private
+      def set_user
+        @user = User.find(params[:user_id])
+      end
+
+      def set_task
+        @task = Task.find(params[:id])
+      end
+
+      def task_params
+        params.permit(:title, :user_id, :contents)
+      end
+
     end    
   end
 end

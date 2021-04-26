@@ -33,6 +33,10 @@ module Api
         end
       end
       # DELETE /api/v1/users/:id
+      def destroy
+        # @post.destroy
+        # render json: @post
+      end
       
       private
       def set_user

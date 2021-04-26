@@ -85,8 +85,31 @@ RSpec.describe "Users", type: :request do
       expect(json['name']).to_not eq(nil)
     end
   end
+
+  describe "DELETE /api/v1/users/:id" do
+    before do
+      @user = create(:user)
+    end
+
+    it "リクエストが成功すること" do
+      delete "#{uri}/#{@user.id}"
+      expect(response.status).to eq(200)
+    end
+
+    it "ユーザーが削除されること" do
+      expect {
+        delete "#{uri}/#{@user.id}"
+      }.to change(User, :count).by(-1)
+    end
+
+    it "存在しないIDが渡された場合404を返すこと" do
+      # 一旦削除する
+      delete "#{uri}/#{@user.id}"
+      expect(response.status).to eq(200)
+
+      # 再度削除する
+      delete "#{uri}/#{@user.id}"
+      expect(response.status).to eq(404)
+    end
+  end
 end
-
-
-# json = JSON.parse(response.body)
-# expect(json['name']).to eq(@user.name)

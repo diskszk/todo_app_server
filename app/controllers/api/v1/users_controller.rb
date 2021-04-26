@@ -7,6 +7,10 @@ module Api
         users = User.order(created_at: :desc)
         render json: users
       end
+
+      def show
+        render json: @user
+      end
     
       def create
         @user = User.new(user_params)
@@ -17,6 +21,11 @@ module Api
         end
       end
     
+      private
+      def set_user
+        @user = User.find(params[:id])
+      end
+      
       def user_params
         params.permit(:name)
       end

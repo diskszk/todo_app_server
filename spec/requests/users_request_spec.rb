@@ -36,6 +36,17 @@ RSpec.describe "Users", type: :request do
       json = JSON.parse(response.body)
       expect(json['name']).to eq(@user.name)
     end
+
+    it "存在しないIDと合致するレコードがない場合404を返すこと" do
+      # 一旦削除する
+      delete "#{uri}/#{@user.id}"
+      expect(response.status).to eq(200)
+
+      # 削除したユーザーの取得を試みる
+      get "#{uri}/#{@user.id}"
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(404)
+    end
   end
 
   describe "POST /api/v1/users" do
@@ -102,7 +113,7 @@ RSpec.describe "Users", type: :request do
       }.to change(User, :count).by(-1)
     end
 
-    it "存在しないIDが渡された場合404を返すこと" do
+    it "存在しないIDと合致するレコードがない場合404を返すこと" do
 
       user_id = @user.id
       

@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Tasks", type: :request do
+  before(:each) do
+    @user = create(:user)
+    @uri = "/api/v1/users/#{@user.id}/tasks"
+  end
 
   describe "GET /api/v1/users/user_id/tasks" do
-    before do
-      @user = create(:user)
-      user_id = @user.id
-      @uri = "/api/v1/users/#{user_id}/tasks"
-    end
-  
     it "リクエストが成功すること" do
       get @uri
       expect(response.status).to eq(200)
@@ -30,8 +28,6 @@ RSpec.describe "Tasks", type: :request do
 
   describe "GET /api/v1/users/user_id/tasks/task_id" do
     before do
-      @user = create(:user)
-      @uri = "/api/v1/users/#{@user.id}/tasks"
       @task = @user.tasks.create(title: "Test Task")
     end
 
@@ -55,8 +51,6 @@ RSpec.describe "Tasks", type: :request do
 
   describe "POST /api/v1/users/user_id/tasks" do
     before do
-      @user = create(:user)
-      @uri = "/api/v1/users/#{@user.id}/tasks"
       @valid_params = {title: "Valid Task"}
     end
     
@@ -73,12 +67,27 @@ RSpec.describe "Tasks", type: :request do
   end
 
   describe "PUT /api/v1/users/user_id/tasks/task_id" do
-    it "リクエストが成功すること" do
-    end
-    it "存在しないリソースにアクセスを試みた場合404を返すこと" do
+    before do
+      @valid_params = {title: "Valid Task"}
+      @task = @user.tasks.create(title: "Test Title")
     end
 
-    it "データが変更されていること"
+    it "リクエストが成功すること" do
+      put "#{@uri}/#{@task.id}", params: @valid_params
+      expect(response.status).to eq(200)
+    end
+
+    it "存在しないリソースにアクセスを試みた場合404を返すこと" do
+      put "#{@uri}/#{@task.id}", params: @valid_params
+      json = JSON.parse(response.body)
+      expect(json[:status]).to eq(404)
+    end
+
+    it "データが変更されていること" do
+      put "#{uri}/#{@task.id}", params: @valid_params
+      json = JSON.parse(response.body)
+      expect(json[:title]).to eq("Valid Task")
+    end
 
   end
 

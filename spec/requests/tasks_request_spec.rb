@@ -78,15 +78,15 @@ RSpec.describe "Tasks", type: :request do
     end
 
     it "存在しないリソースにアクセスを試みた場合404を返すこと" do
-      put "#{@uri}/#{@task.id}", params: @valid_params
+      put "#{@uri}/404", params: @valid_params
       json = JSON.parse(response.body)
-      expect(json[:status]).to eq(404)
+      expect(json['status']).to eq(404)
     end
 
     it "データが変更されていること" do
-      put "#{uri}/#{@task.id}", params: @valid_params
+      put "#{@uri}/#{@task.id}", params: @valid_params
       json = JSON.parse(response.body)
-      expect(json[:title]).to eq("Valid Task")
+      expect(json['title']).to eq("Valid Task")
     end
 
   end

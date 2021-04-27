@@ -1,7 +1,7 @@
 module Api
   module V1  
     class TasksController < ApplicationController
-      before_action :set_task, only: [:show]
+      before_action :set_task, only: [:show, :update]
 
       # GET /api/v1/users/:user_id/tasks
       # BUG: タスクIDがユーザーIDと一致する一見しか取得していない
@@ -27,6 +27,13 @@ module Api
       end
 
       # PUT /api/v1/users/:user_id/tasks/:task_id
+      def update
+        if @task.update(task_params)
+          render json: @task
+        else
+          render json: @task.errors
+        end
+      end
 
       # DELETE /api/v1/users/:user_id/tasks/:task_id
 

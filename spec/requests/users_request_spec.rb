@@ -89,6 +89,8 @@ RSpec.describe "Users", type: :request do
       expect(json['name']).to eq("user_name")
     end
 
+    it "存在しないリソースにアクセスを試みた場合404を返すこと"
+    
     it "nameをnullでは書き換えられないこと" do
       user_name = @user.name
       put "#{uri}/#{@user.id}", params: {name: nil}
@@ -126,7 +128,19 @@ RSpec.describe "Users", type: :request do
       expect(json['status']).to eq(404)
     end
 
-    it "ユーザーを削除したら紐づくタスクも削除されること"
+    it "ユーザーを削除したら紐づくタスクも削除されること" do
+      # タスクを作成
+      @user.tasks.create(title: "Test Task")
+
+      # ユーザーを削除
+      delete "#{uri}/#{@user.id}"
+      expect(response.status).to eq(200)
+
+      # 削除したユーザーに紐づくタスクにアクセス
+      get "#{uri}/#{@user.id}/tasks"
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(404)
+    end
 
   end
 end

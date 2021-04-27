@@ -92,14 +92,26 @@ RSpec.describe "Tasks", type: :request do
   end
 
   describe "DELETE /api/v1/users/user_id/tasks/task_id" do
+    before do
+      @task = @user.task.create(titkeL "Test Title")
+    end
+    
     it "リクエストが成功すること" do
+       delete "#{@uri}/#{@task.id}"
+       expect(response.status).to eq(200)
     end
+
     it "存在しないリソースにアクセスを試みた場合404を返すこと" do
+      delete "#{@uri}/404"
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(404)
     end
-    it "タスクが削除されること"
+
+    it "タスクが削除されること" do
+      expect {
+        delete "#{@uri}/#{@task.id}"
+      }.to change(Task, :count).by(-1)
+    end
   end
  
-
-
-
 end

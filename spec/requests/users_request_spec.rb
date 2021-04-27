@@ -89,7 +89,11 @@ RSpec.describe "Users", type: :request do
       expect(json['name']).to eq("user_name")
     end
 
-    it "存在しないリソースにアクセスを試みた場合404を返すこと"
+    it "存在しないリソースにアクセスを試みた場合404を返すこと" do
+      put "#{uri}/404", params: @valid_params
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(404)
+    end
     
     it "nameをnullでは書き換えられないこと" do
       user_name = @user.name

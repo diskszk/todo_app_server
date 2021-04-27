@@ -93,7 +93,7 @@ RSpec.describe "Tasks", type: :request do
 
   describe "DELETE /api/v1/users/user_id/tasks/task_id" do
     before do
-      @task = @user.task.create(titkeL "Test Title")
+      @task = @user.tasks.create(title: "Test Title")
     end
     
     it "リクエストが成功すること" do

@@ -32,25 +32,44 @@ RSpec.describe "Tasks", type: :request do
     before do
       @user = create(:user)
       @uri = "/api/v1/users/#{@user.id}/tasks"
+      @task = @user.tasks.create(title: "Test Task")
     end
-    
+
     it "リクエストが成功すること" do
-      task = @user.tasks.create(title: "Test Task")
-      get "#{@uri}/#{task.id}"
+      get "#{@uri}/#{@task.id}"
       expect(response.status).to eq(200)
     end
 
     it "存在しないリソースにアクセスを試みた場合404を返すこと" do
+      get "#{@uri}/404"
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(404)
     end
-    it "タスク情報を1件取得できること"
+
+    it "タスク情報を1件取得できること" do
+      get "#{@uri}/#{@task.id}"
+      json = JSON.parse(response.body)
+      expect(json["title"]).to eq(@task.title)
+    end
   end
 
   describe "POST /api/v1/users/user_id/tasks" do
+    before do
+      @user = create(:user)
+      @uri = "/api/v1/users/#{@user.id}/tasks"
+      @valid_params = {title: "Valid Task"}
+    end
+    
     it "リクエストが成功すること" do
+      post "#{@uri}", params: @valid_params
+      expect(response.status).to eq(200)
     end
 
-    it "データが作成されること"
-
+    it "データが作成されること" do
+      expect {
+        post "#{@uri}", params: @valid_params
+      }.to change(Task, :count).by(+1)
+    end
   end
 
   describe "PUT /api/v1/users/user_id/tasks/task_id" do

@@ -4,9 +4,10 @@ module Api
       before_action :set_task, only: [:show]
 
       # GET /api/v1/users/:user_id/tasks
+      # BUG: タスクIDがユーザーIDと一致する一見しか取得していない
       def index
-        tasks = Task.find(params[:user_id])
-        render json: tasks
+        user = User.find(params[:user_id])
+        render json: user.tasks
       end
 
       # GET /api/v1/users/:user_id/tasks/:task_id

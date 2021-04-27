@@ -6,8 +6,7 @@ RSpec.describe "Users", type: :request do
   
   describe "GET /api/v1/users" do
     before do
-      # create_list(:user, 10)
-      create_list(:user, 10 - 3) # spec/factories/tasks.rbで作成したインスタンスが消えない
+      create_list(:user, 10)
     end
 
     it "リクエストが成功すること" do
@@ -38,7 +37,7 @@ RSpec.describe "Users", type: :request do
       expect(json['name']).to eq(@user.name)
     end
 
-    it "存在しないIDと合致するレコードがない場合404を返すこと" do
+    it "存在しないリソースにアクセスを試みた場合404を返すこと" do
       # 一旦削除する
       delete "#{uri}/#{@user.id}"
       expect(response.status).to eq(200)
@@ -90,7 +89,7 @@ RSpec.describe "Users", type: :request do
       expect(json['name']).to eq("user_name")
     end
 
-    it "nullでは書き換えられないこと" do
+    it "nameをnullでは書き換えられないこと" do
       user_name = @user.name
       put "#{uri}/#{@user.id}", params: {name: nil}
       json = JSON.parse(response.body)
@@ -114,8 +113,7 @@ RSpec.describe "Users", type: :request do
       }.to change(User, :count).by(-1)
     end
 
-    it "存在しないIDと合致するレコードがない場合404を返すこと" do
-
+    it "存在しないリソースにアクセスを試みた場合404を返すこと" do
       user_id = @user.id
       
       # 一旦削除する
@@ -127,5 +125,8 @@ RSpec.describe "Users", type: :request do
       json = JSON.parse(response.body)
       expect(json['status']).to eq(404)
     end
+
+    it "ユーザーを削除したら紐づくタスクも削除されること"
+
   end
 end
